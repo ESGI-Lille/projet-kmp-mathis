@@ -40,15 +40,22 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.navigation.compose)
             implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.mock)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
     }
+
 }
+
 
 android {
     namespace = "org.example.project"
@@ -61,9 +68,12 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
     packaging {
+
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/INDEX.LIST"
         }
     }
     buildTypes {
@@ -80,6 +90,7 @@ android {
 dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.media3.common.ktx)
     debugImplementation(compose.uiTooling)
 }
 
