@@ -3,7 +3,6 @@ package org.example.project.Network
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
-import kotlinx.serialization.json.Json
 
 suspend fun getData(): String {
     val response: HttpResponse = client.get(

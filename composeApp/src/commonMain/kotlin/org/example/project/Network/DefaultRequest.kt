@@ -30,12 +30,15 @@ val client = HttpClient(CIO) {
                 is ClientRequestException -> {
                     throw exception // Rethrow the exception if you want to handle it elsewhere
                 }
+
                 is ServerResponseException -> {
                     throw exception // Rethrow the exception if you want to handle it elsewhere
                 }
+
                 is ResponseException -> {
                     throw exception // Rethrow the exception if you want to handle it elsewhere
                 }
+
                 else -> throw exception
             }
         }

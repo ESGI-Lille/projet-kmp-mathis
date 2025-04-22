@@ -1,34 +1,35 @@
 package org.example.project.View
 
-
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import art_kotlin.composeapp.generated.resources.Res
-import art_kotlin.composeapp.generated.resources.compose_multiplatform
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.navigation.navArgument
+import org.example.project.ViewModel.HomeViewModel
 
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun App() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") { Home(navController) }
-        composable("exposition") { Container(Res.drawable.compose_multiplatform) }
+
+    Scaffold(
+        topBar = {
+            SmallTopAppBar(navController)
+        }
+    ) { innerPadding ->
+        NavHost(navController = navController, startDestination = "home",
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            composable("home") { Home(navController) }
+            composable("exposition") { Container(homeViewModel = HomeViewModel()) }
+        }
     }
 }
-
-
-
-
-
-
-
-
-
-
