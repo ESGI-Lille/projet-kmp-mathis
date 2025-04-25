@@ -1,6 +1,8 @@
 package org.example.project.View
 
-import androidx.compose.foundation.Image
+import ApiReponsePerson
+import ApiResponseObject
+import Record
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,69 +13,87 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import art_kotlin.composeapp.generated.resources.Res
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
-import art_kotlin.composeapp.generated.resources.logo
+import coil3.compose.AsyncImage
 import org.example.project.ViewModel.HomeViewModel
 
+
 @Composable
-fun CardTableau(imageResource: DrawableResource) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+fun CardTableau(record: Record) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp), // Ajoute du padding à l'intérieur de la carte
-            horizontalAlignment = Alignment.CenterHorizontally // Centre les éléments horizontalement
+        // Période et siècle
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Leonard de Vinci",
-                style = MaterialTheme.typography.headlineSmall, // Utilise un style de titre
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp) // Ajoute un peu d'espace sous le nom
-            )
-            Image(
-                painter = painterResource(imageResource),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(300.dp) // Réduit légèrement la taille de l'image
-                    .padding(bottom = 8.dp) // Ajoute un peu d'espace sous l'image
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(), // Fait en sorte que la Row prenne toute la largeur
-                horizontalArrangement = Arrangement.SpaceBetween, // Répartit l'espace entre les textes
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            if (record.period != null) {
                 Text(
-                    text = "1872",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold), // Style pour l'année
+                    text = record.period,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                    fontSize = 14.sp
                 )
+            }
+            if (record.images.isNotEmpty()) {
+                AsyncImage(
+                    model = record.images.first().baseimageurl,
+                    contentDescription = record.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    onError = { error ->
+                        println(error)
+                    },
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            if (record.century != null) {
                 Text(
-                    text = "affiché au musée d'Orsay",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic), // Style pour le lieu
+                    text = record.century,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                    fontSize = 14.sp
                 )
             }
         }
+        // Culture
+        if (record.culture != null) {
+            Text(
+                text = record.culture,
+                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 14.sp,
+            )
+        }
+        // Date de création
+        Text(
+            text = "Créé le: ${record.createDate}",
+            style = MaterialTheme.typography.bodySmall,
+            fontSize = 12.sp,
+        )
     }
 }
 
 
 @Composable
 fun Container(homeViewModel: HomeViewModel = viewModel()) {
-    val data: String? by homeViewModel.data.collectAsState()
+    val collectionData: ApiResponseObject? by homeViewModel.data.collectAsState()
+    val authorData: ApiReponsePerson? by homeViewModel.authorData.collectAsState()
     val isLoading by homeViewModel.isLoading.collectAsState()
     val error by homeViewModel.error.collectAsState()
 
-    if (data.isNullOrEmpty() && !isLoading && error.isNullOrEmpty()) {
+
+    if (collectionData == null && authorData == null && !isLoading && error.isNullOrEmpty()) {
         LaunchedEffect(Unit) {
-            homeViewModel.fetchData()
+            homeViewModel.getRandomAuthorAndItsCollections()
+            println("OOOO");
         }
     }
 
@@ -89,21 +109,24 @@ fun Container(homeViewModel: HomeViewModel = viewModel()) {
                 CircularProgressIndicator()
             } else if (error != null) {
                 Text(text = "Erreur : $error", color = MaterialTheme.colorScheme.error)
-            } else if (!data.isNullOrEmpty()) {
-                Text(text = "Données récupérées : $data")
+            } else if (authorData != null) {
+                Text(
+                    text = authorData!!.displayname,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
             } else {
-                Text(text = "Aucune donnée disponible.")
+                Text(text = "Erreur : $error", color = MaterialTheme.colorScheme.error)
+                println("Erreur dans Container: $error")
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-        val itemsList = listOf(
-            Res.drawable.logo,
-            Res.drawable.logo,
-            Res.drawable.logo,
-            Res.drawable.logo
-        )
-        items(itemsList) { item ->
-            CardTableau(imageResource = item)
+
+        collectionData?.let {
+            items(it.records) { item ->
+                CardTableau(record = item)
+            }
         }
     }
 }

@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.mock)
+            implementation("io.coil-kt.coil3:coil-compose:3.1.0")
 
         }
         desktopMain.dependencies {
