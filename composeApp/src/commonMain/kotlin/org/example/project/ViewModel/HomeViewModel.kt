@@ -1,24 +1,18 @@
-// File: HomeViewModel.kt
 package org.example.project.ViewModel
 
-import ApiReponsePerson
-import ApiResponseObject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.example.project.Network.getDataFromRandomAuthor
-import org.example.project.Network.getRandomAuthor
+import org.example.project.Network.Entity.Movie
+import org.example.project.Network.getRandomMovies
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel() : ViewModel() {
 
-    private val _authorData = MutableStateFlow<ApiReponsePerson?>(null)
-    val authorData: StateFlow<ApiReponsePerson?> = _authorData.asStateFlow()
-
-    private val _collectionsData = MutableStateFlow<ApiResponseObject?>(null)
-    val data: StateFlow<ApiResponseObject?> = _collectionsData.asStateFlow()
+    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
+    val movies: StateFlow<List<Movie>> = _movies.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -26,25 +20,32 @@ class HomeViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    fun getRandomAuthorAndItsCollections() {
+
+    fun loadRandomMovies() {
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                val authorData = getRandomAuthor()
-                val collectionsData = getDataFromRandomAuthor()
-                _collectionsData.value = collectionsData
-                _authorData.value = authorData
+                println("Début de la requête pour obtenir des films aléatoires")
+                val response = getRandomMovies()
+                println("Réponse reçue, nombre de résultats: ${response.results?.size ?: 0}")
+
+                if (response.results != null && response.results.isNotEmpty()) {
+                    _movies.value = response.results
+                    println("Films mis à jour: ${_movies.value.size} films")
+                } else {
+                    println("La liste de résultats est vide ou nulle")
+                    _movies.value = emptyList()
+                }
+
                 _isLoading.value = false
                 _error.value = null
             } catch (e: Exception) {
+                println("Exception: ${e.message}")
                 e.printStackTrace()
-                _collectionsData.value = null
-                _authorData.value = null
+                _movies.value = emptyList()
                 _isLoading.value = false
-                _error.value = "Erreur lors de la récupération des données : ${e.message}"
+                _error.value = "Erreur lors de la récupération des films : ${e.message}"
             }
         }
     }
-
-    // Plus besoin de returnData() de cette manière pour l'UI Compose
 }

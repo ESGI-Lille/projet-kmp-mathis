@@ -46,7 +46,12 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.mock)
+            implementation(libs.okhttp)
+            implementation(libs.androidx.ui)
+            implementation(libs.androidx.ui.tooling)
+            implementation(libs.androidx.runtime)
             implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+            implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
 
         }
         desktopMain.dependencies {
@@ -93,6 +98,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.runtime.android)
+    implementation(libs.androidx.foundation.android)
     debugImplementation(compose.uiTooling)
 }
 
