@@ -21,6 +21,10 @@ class HomeViewModel() : ViewModel() {
     val error: StateFlow<String?> = _error.asStateFlow()
 
 
+    /**
+     * ViewModel pour l'écran des films randoms, le but est de récupérer une page aléatoire de l'api et l'afficher
+     */
+
     fun loadRandomMovies() {
         _isLoading.value = true
         viewModelScope.launch {

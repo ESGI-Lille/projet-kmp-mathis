@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,19 +26,20 @@ import org.example.project.ViewModel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieListScreen(
-    homeViewModel: HomeViewModel = viewModel(),
-    navController: NavController
-) {
+fun MovieListScreen(homeViewModel: HomeViewModel, navController: NavController) {
+
+    // Données du view model
     val movies by homeViewModel.movies.collectAsState()
     val isLoading by homeViewModel.isLoading.collectAsState()
     val error by homeViewModel.error.collectAsState()
 
+    // Chaque reload du composant on requête
     LaunchedEffect(Unit) {
         homeViewModel.loadRandomMovies()
     }
 
     Scaffold(
+        // Barre du haut
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -49,12 +51,11 @@ fun MovieListScreen(
                     )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = Color.DarkGray,
+                    titleContentColor = Color.White
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -62,13 +63,19 @@ fun MovieListScreen(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
+
+            // isloading true
             when {
                 isLoading -> CircularProgressIndicator()
+
+                // Erreur
                 error != null -> Text(
                     text = "Erreur : $error",
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium
                 )
+
+                // Affichage OK
                 movies.isNotEmpty() -> LazyColumn(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -77,6 +84,8 @@ fun MovieListScreen(
                         MovieCard(movie = movies[index], navController = navController)
                     }
                 }
+
+                // Vide
                 else -> Text(
                     text = "Aucun film trouvé.",
                     style = MaterialTheme.typography.bodyMedium
@@ -86,18 +95,16 @@ fun MovieListScreen(
     }
 }
 
+
+// Card
 @Composable
-fun MovieCard(
-    movie: Movie,
-    navController: NavController
-) {
+fun MovieCard(movie: Movie, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { navController.navigate("detail/${movie.id}") },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column {
             AsyncImage(
@@ -114,7 +121,6 @@ fun MovieCard(
                     text = movie.title.orEmpty(),
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -137,7 +143,6 @@ fun MovieCard(
                     Text(
                         text = movie.releaseDate?.substringBefore("-") ?: "--",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

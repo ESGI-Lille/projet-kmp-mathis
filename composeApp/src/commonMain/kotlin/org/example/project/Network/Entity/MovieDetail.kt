@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieDetail(
     val genres: List<Genre>?,
-    val id: Int,
+    var id: Int?,
     val overview: String?,
     @SerialName("poster_path")
     val posterPath: String?,

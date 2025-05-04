@@ -1,145 +1,123 @@
+package org.example.project.View
+
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import org.example.project.Network.Entity.Genre
+import kotlinx.coroutines.launch
 import org.example.project.Network.Entity.MovieDetail
-import org.example.project.Network.Entity.ProductionCompany
 import org.example.project.ViewModel.DetailPageViewModel
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailScreen(navController: NavController, movieId: Int?, detailPageViewModel: DetailPageViewModel = viewModel()) {
+fun MovieDetailScreen(navController: NavController, movieId: Int?, detailPageViewModel: DetailPageViewModel) {
+
+    // Données du view model
     val movieData by detailPageViewModel.movie.collectAsState()
     val isLoading by detailPageViewModel.isLoading.collectAsState()
     val error by detailPageViewModel.error.collectAsState()
 
+    // Pour les snackbars
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    // Reload de la page a chaque changement d'ID
     LaunchedEffect(movieId) {
-        if (movieId != null) {
-            detailPageViewModel.getSingleMovieData(movieId)
-        }
+        movieId?.let { detailPageViewModel.getSingleMovieData(it) }
     }
 
-    if (isLoading) {
-        Text("Chargement des détails du film...")
-    } else if (error != null) {
-        Text("Erreur: $error")
-    } else if (movieData != null) {
-        // Affiche le composable de détails en passant movieData
-        MovieDetailContent(movie = movieData!!)
-    } else {
-        Text("Aucun détail de film trouvé.")
-    }
-}
-
-@Composable
-fun MovieDetailContent(movie: MovieDetail) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        // Affiche le titre du film
-        Text(
-            text = movie.title ?: "Titre inconnu",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold
-        )
-
-        // Affiche la tagline du film, si elle existe
-        if (movie.tagline != null) {
-            Text(
-                text = "\"${movie.tagline}\"",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(top = 4.dp)
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigate("home") }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Retour"
+                        )
+                    }
+                },
+                title = { Text("Search Results") }
             )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { padding ->
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
-            // Affiche l'image de l'affiche du film
-            if (movie.posterPath != null) {
-                AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-                    contentDescription = "Affiche du film ${movie.title}",
-                    modifier = Modifier
-                        .width(150.dp)
-                        .aspectRatio(0.67f) // Ratio d'aspect typique d'une affiche de film
-                        .clip(MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Crop
+            // isloading true
+            when {
+                isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                error != null -> Text(
+                    text = error!!,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                // Affichage OK
+                movieData != null -> {
+                    val movie = movieData!!
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(text = movie.title.orEmpty(), style = MaterialTheme.typography.headlineLarge)
+                        movie.tagline?.let { Text(text = "\"$it\"", style = MaterialTheme.typography.titleMedium) }
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                            contentDescription = movie.title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                        )
+                        Text(text = "Sortie: ${movie.releaseDate.orEmpty()}")
+                        Text(text = "Score: ${movie.voteAverage ?: 0.0}")
+                        movie.overview?.let { Text(text = it) }
+                        Spacer(Modifier.height(16.dp))
+
+                        // Boutons d'actions
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Button(
+                                onClick = {
+                                    detailPageViewModel.addToWatchlist(movie)
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Film ajouté à la watchlist")
+                                    }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) { Text("Watchlist") }
+                            Button(
+                                onClick = {
+                                    detailPageViewModel.addToFavorites(movie)
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Film ajouté aux favoris")
+                                    }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) { Text("Favoris") }
+                        }
+                    }
+                }
+
+                // loading KO
+                else -> Text(
+                    text = "Aucun détail disponible",
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
-
-            Column {
-                // Affiche la date de sortie
-                if (movie.releaseDate != null) {
-                    Text(text = "Sortie: ${movie.releaseDate}", style = MaterialTheme.typography.bodyMedium)
-                }
-
-                // Affiche le score moyen et le nombre de votes
-                if (movie.voteAverage != null && movie.voteCount != null) {
-                    Text(
-                        text = "Score: ${movie.voteAverage} (${movie.voteCount} votes)",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-        }
-
-        // Affiche la liste des genres
-        if (movie.genres != null && movie.genres.isNotEmpty()) {
-            Text(text = "Genres:", style = MaterialTheme.typography.titleMedium)
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(movie.genres) { genre ->
-                    GenreChip(genre = genre)
-                }
-            }
-        }
-
-        // Affiche la description du film
-        if (movie.overview != null) {
-            Text(text = "Synopsis:", style = MaterialTheme.typography.titleMedium)
-            Text(text = movie.overview, style = MaterialTheme.typography.bodyLarge)
-        }
-
-        // Affiche la liste des compagnies de production
-        if (movie.productionCompanies.isNotEmpty()) {
-            Text(text = "Production:", style = MaterialTheme.typography.titleMedium)
-            Column {
-                movie.productionCompanies.forEach { company ->
-                    ProductionCompanyItem(company = company)
-                }
-            }
         }
     }
-}
-
-@Composable
-fun GenreChip(genre: Genre) {
-    SuggestionChip(onClick = {}, label = { Text(genre.name ?: "Inconnu") })
-}
-
-@Composable
-fun ProductionCompanyItem(company: ProductionCompany) {
-    Text(text = company.name)
-    // Vous pourriez ajouter le logo de la compagnie ici si logoPath n'est pas null
 }

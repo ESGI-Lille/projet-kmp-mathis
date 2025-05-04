@@ -1,0 +1,264 @@
+{
+  "favorites": [
+    {
+      "id": 1061474,
+      "genres": [
+        {
+          "id": 28,
+          "name": "Action"
+        },
+        {
+          "id": 12,
+          "name": "Adventure"
+        },
+        {
+          "id": 878,
+          "name": "Science Fiction"
+        }
+      ],
+      "overview": "Superman, a cub reporter in Metropolis, embarks on a journey to reconcile his Kryptonian heritage with his human upbringing as Clark Kent.",
+      "poster_path": "/wPLysNDLffQLOVebZQCbXJEv6E6.jpg",
+      "production_companies": [
+        {
+          "id": 184898,
+          "logo_path": "/2Z2hiM1ERqFOWRxNxWoJZ8lTxhb.png",
+          "name": "DC Studios",
+          "origin_country": "US"
+        },
+        {
+          "id": 94218,
+          "logo_path": "/zjIyeqPOPmKa8eubquKLiy2y2rR.png",
+          "name": "Troll Court Entertainment",
+          "origin_country": "US"
+        },
+        {
+          "id": 11565,
+          "logo_path": "/S74cHHbIrdmb5M51Pft72Uo9Gz.png",
+          "name": "The Safran Company",
+          "origin_country": "US"
+        }
+      ],
+      "release_date": "2025-07-09",
+      "tagline": "Look up.",
+      "title": "Superman",
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "id": 741335,
+      "genres": [
+        {
+          "id": 16,
+          "name": "Animation"
+        },
+        {
+          "id": 18,
+          "name": "Drama"
+        },
+        {
+          "id": 878,
+          "name": "Science Fiction"
+        }
+      ],
+      "overview": "Satomi is fine being alone until an AI named Shion joins her class with a song and a promise to make her happy. While Shion’s musical numbers and princess gowns don’t quite pass as human, her antics bring Satomi closer to four other classmates. Together, they make memories worth saving, but even our most precious data can be erased.",
+      "poster_path": "/5N9a7bkt3cldZps5Zal3lN4dgy7.jpg",
+      "production_companies": [
+        {
+          "id": 11884,
+          "logo_path": "/tHzHPSKdmLT5zCdqFbcmHzZvRIc.png",
+          "name": "J.C.STAFF",
+          "origin_country": "JP"
+        },
+        {
+          "id": 192,
+          "logo_path": "/93eAKlnQecDdMtucfOprzcjMw9V.png",
+          "name": "Shochiku",
+          "origin_country": "JP"
+        },
+        {
+          "id": 168856,
+          "logo_path": "/bIxHmcVmPmVWnuvQ2R3Sjhk0d4K.png",
+          "name": "Funimation Films",
+          "origin_country": "US"
+        }
+      ],
+      "release_date": "2021-10-29",
+      "tagline": "",
+      "title": "Sing a Bit of Harmony",
+      "vote_average": 7.8,
+      "vote_count": 55
+    },
+    {
+      "id": 605886,
+      "genres": [
+        {
+          "id": 53,
+          "name": "Thriller"
+        },
+        {
+          "id": 80,
+          "name": "Crime"
+        },
+        {
+          "id": 18,
+          "name": "Drama"
+        }
+      ],
+      "overview": "Baltimore. New Year's Eve. A talented but troubled police officer is recruited by the FBI's chief investigator to help profile and track down a mass murderer.",
+      "poster_path": "/anikluX0onmtzTe46WlazvaetwH.jpg",
+      "production_companies": [
+        {
+          "id": 7493,
+          "logo_path": "/fHitYiGUCkRafgt6VPYQlXWLkdp.png",
+          "name": "FilmNation Entertainment",
+          "origin_country": "US"
+        },
+        {
+          "id": 106786,
+          "logo_path": "/w1frKfyOXbGcK6kKtRnTNJfmtBv.png",
+          "name": "RainMaker Films",
+          "origin_country": "US"
+        }
+      ],
+      "release_date": "2023-04-06",
+      "tagline": "A city at the center of chaos. A detective with special skills. A madman testing her limits.",
+      "title": "To Catch a Killer",
+      "vote_average": 6.891,
+      "vote_count": 1137
+    },
+    {
+      "id": 1061474,
+      "genres": [
+        {
+          "id": 28,
+          "name": "Action"
+        },
+        {
+          "id": 12,
+          "name": "Adventure"
+        },
+        {
+          "id": 878,
+          "name": "Science Fiction"
+        }
+      ],
+      "overview": "Superman, a cub reporter in Metropolis, embarks on a journey to reconcile his Kryptonian heritage with his human upbringing as Clark Kent.",
+      "poster_path": "/wPLysNDLffQLOVebZQCbXJEv6E6.jpg",
+      "production_companies": [
+        {
+          "id": 184898,
+          "logo_path": "/2Z2hiM1ERqFOWRxNxWoJZ8lTxhb.png",
+          "name": "DC Studios",
+          "origin_country": "US"
+        },
+        {
+          "id": 94218,
+          "logo_path": "/zjIyeqPOPmKa8eubquKLiy2y2rR.png",
+          "name": "Troll Court Entertainment",
+          "origin_country": "US"
+        },
+        {
+          "id": 11565,
+          "logo_path": "/S74cHHbIrdmb5M51Pft72Uo9Gz.png",
+          "name": "The Safran Company",
+          "origin_country": "US"
+        }
+      ],
+      "release_date": "2025-07-09",
+      "tagline": "Look up.",
+      "title": "Superman",
+      "vote_average": 0,
+      "vote_count": 0
+    }
+  ],
+  "watchlist": [
+    {
+      "id": 1061474,
+      "genres": [
+        {
+          "id": 28,
+          "name": "Action"
+        },
+        {
+          "id": 12,
+          "name": "Adventure"
+        },
+        {
+          "id": 878,
+          "name": "Science Fiction"
+        }
+      ],
+      "overview": "Superman, a cub reporter in Metropolis, embarks on a journey to reconcile his Kryptonian heritage with his human upbringing as Clark Kent.",
+      "poster_path": "/wPLysNDLffQLOVebZQCbXJEv6E6.jpg",
+      "production_companies": [
+        {
+          "id": 184898,
+          "logo_path": "/2Z2hiM1ERqFOWRxNxWoJZ8lTxhb.png",
+          "name": "DC Studios",
+          "origin_country": "US"
+        },
+        {
+          "id": 94218,
+          "logo_path": "/zjIyeqPOPmKa8eubquKLiy2y2rR.png",
+          "name": "Troll Court Entertainment",
+          "origin_country": "US"
+        },
+        {
+          "id": 11565,
+          "logo_path": "/S74cHHbIrdmb5M51Pft72Uo9Gz.png",
+          "name": "The Safran Company",
+          "origin_country": "US"
+        }
+      ],
+      "release_date": "2025-07-09",
+      "tagline": "Look up.",
+      "title": "Superman",
+      "vote_average": 0,
+      "vote_count": 0
+    },
+    {
+      "id": 1061474,
+      "genres": [
+        {
+          "id": 28,
+          "name": "Action"
+        },
+        {
+          "id": 12,
+          "name": "Adventure"
+        },
+        {
+          "id": 878,
+          "name": "Science Fiction"
+        }
+      ],
+      "overview": "Superman, a cub reporter in Metropolis, embarks on a journey to reconcile his Kryptonian heritage with his human upbringing as Clark Kent.",
+      "poster_path": "/wPLysNDLffQLOVebZQCbXJEv6E6.jpg",
+      "production_companies": [
+        {
+          "id": 184898,
+          "logo_path": "/2Z2hiM1ERqFOWRxNxWoJZ8lTxhb.png",
+          "name": "DC Studios",
+          "origin_country": "US"
+        },
+        {
+          "id": 94218,
+          "logo_path": "/zjIyeqPOPmKa8eubquKLiy2y2rR.png",
+          "name": "Troll Court Entertainment",
+          "origin_country": "US"
+        },
+        {
+          "id": 11565,
+          "logo_path": "/S74cHHbIrdmb5M51Pft72Uo9Gz.png",
+          "name": "The Safran Company",
+          "origin_country": "US"
+        }
+      ],
+      "release_date": "2025-07-09",
+      "tagline": "Look up.",
+      "title": "Superman",
+      "vote_average": 0,
+      "vote_count": 0
+    }
+  ]
+}

@@ -8,9 +8,6 @@ import io.ktor.client.request.headers
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-
-
-
 val client = HttpClient(CIO) {
     install(ContentNegotiation) {
         json(Json {
@@ -18,7 +15,6 @@ val client = HttpClient(CIO) {
             useAlternativeNames = false
         })
     }
-
     defaultRequest {
         headers {
             append("Accept", "application/json")

@@ -6,15 +6,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.example.project.Network.Entity.Movie
-import org.example.project.Network.Entity.MovieDetail
-
 import org.example.project.Network.getMovieData
+import org.example.project.Network.Entity.MovieDetail
+import org.example.project.Network.addToFavoritesLocal
+import org.example.project.Network.addToWatchlistLocal
 
+/**
+ * ViewModel pour l'écran de détail d'un film, utilise JSON Server local pour watchlist/favoris
+ */
+class DetailPageViewModel : ViewModel() {
 
-class DetailPageViewModel: ViewModel() {
-
-    // Dans votre DetailPageViewModel
     private val _movie = MutableStateFlow<MovieDetail?>(null)
     val movie: StateFlow<MovieDetail?> = _movie.asStateFlow()
 
@@ -24,18 +25,41 @@ class DetailPageViewModel: ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+
+    /**
+     * Charge les détails du film
+     */
     suspend fun getSingleMovieData(movieId: Int) {
         _isLoading.value = true
-        _error.value = null // Réinitialiser l'erreur au début de la requête
+        _error.value = null
         try {
-            val movieDetail = getMovieData(movieId) // Supposons que vous ayez un repository
+            val movieDetail = getMovieData(movieId)
             _movie.value = movieDetail
-            _isLoading.value = false
         } catch (e: Exception) {
-            _error.value = "Erreur lors du chargement des détails du film: ${e.localizedMessage}"
+            _error.value = "Erreur chargement détails: ${e.localizedMessage}"
+            _movie.value = null
+        } finally {
             _isLoading.value = false
-            _movie.value = null // Réinitialiser les données en cas d'erreur
+        }
+    }
+
+    /**
+     * Ajoute un film à la watchlist locale
+     */
+    fun addToWatchlist(movieData: MovieDetail) {
+        viewModelScope.launch {
+            val success = addToWatchlistLocal(movieData)
+            if (!success) _error.value = "Impossible d'ajouter à la watchlist locale"
+        }
+    }
+
+    /**
+     * Ajoute un film aux favoris locaux
+     */
+    fun addToFavorites(movieId: MovieDetail) {
+        viewModelScope.launch {
+            val success = addToFavoritesLocal(movieId)
+            if (!success) _error.value = "Impossible d'ajouter aux favoris locaux"
         }
     }
 }
-
