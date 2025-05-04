@@ -13,10 +13,8 @@ https://developer.themoviedb.org/reference/intro/getting-started
 * **Découvrir** des films aléatoires via l’API TMDb.
 * **Rechercher** un film par titre.
 * **Afficher** les détails d’un film (affiche, synopsis, date de sortie, score, genres, production).
-* **Ajouter / Supprimer** des films à une **Watchlist** locale (JSON Server).
-* **Ajouter / Supprimer** des films aux **Favoris** locaux (JSON Server).
-* Navigation fluide entre les écrans : Accueil, Liste de films, Résultats de recherche, Détail, Watchlist, Favoris.
-
+* **Ajouter / des films à une **Watchlist** locale (JSON Server).
+* **Ajouter /des films ax **Favoris** locaux (JSON Server).
 ---
 
 
